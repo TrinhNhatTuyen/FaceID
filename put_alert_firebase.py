@@ -2,7 +2,7 @@ import threading
 from firebase import firebase
 class PutAlertThread(threading.Thread):
     def __init__(self, homeid, value):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, name = "Put-Alert")
         self.homeid = homeid
         self.value = value
 
