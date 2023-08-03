@@ -221,7 +221,8 @@ def check_new_img():
 
 employees = get_embeddinglist_from_database()
 check_new_img()
-print("employee representations retrieved successfully")
+# print("employee representations retrieved successfully")
+print("\nDetecting...")
 # check_window_exist = [None,None,None,None,None,None,None,None,None,None,None,None,None]
 def mainVGGregface():
     global employees, access_token
@@ -265,7 +266,7 @@ def mainVGGregface():
     warning=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     alert=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     
-   # count_frame=[int(0),int(0),int(0),int(0)]
+    None_frame=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     try:
         while True:
             
@@ -286,11 +287,15 @@ def mainVGGregface():
                     print(f"Timeout, can't read new frame of cam {CC}!")
                     raise Exception()
                 
-                # if(count_frame[CC]%3==0):
+                if None_frame[CC]>5:
+                    print("Cannot read frame from camera!")
+                    raise Exception()
                 if first_frame[CC] is None:
                     first_frame[CC] = frame[CC]
-                    print('1')
+                    None_frame[CC]+=1
                     continue
+                
+                
                 scale_percent = 100 # percent of original size
                 width = int(frame[CC].shape[1] * scale_percent / 100)
                 height = int(frame[CC].shape[0] * scale_percent / 100)
