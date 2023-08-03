@@ -6,6 +6,7 @@ import numpy as np
 import cv2
 import base64
 import os
+# from tqdm import tqdm
 import tensorflow as tf
 from mtcnn.mtcnn import MTCNN
 from matplotlib import pyplot
@@ -100,9 +101,11 @@ def prepare_data():
     #         cv2.waitKey(0)
     #     print()  
     def read_NV(conn):
-        print("Read_NV")
+        print("Tải về dữ liệu nhận diện...")
         cursor = conn.cursor()
         cursor.execute("SELECT TenHA, ID_NhanVien, HA_BASE64 FROM HinhAnh_NhanDien WHERE HA_BASE64 <> 'None'")
+        # results = cursor.fetchall()
+        # for row in tqdm(results):
         for row in cursor:
             path='./hinhanh/'+'NV_'+f'{row[1]}'
             img = chuyen_base64_sang_anh(row[2])
@@ -110,17 +113,19 @@ def prepare_data():
                 os.mkdir(path) 
             cv2.imwrite(os.path.join(path , f'{row[0]}'), img)
             cv2.waitKey(0)
-        print()
+            
         cursor.close()
-        
+        #---------------------------------------------------------------------
         # COPY các thư mục trong "hinhlaytucamera" vào "hinhtrain"
-        for folder in os.listdir('hinhlaytucamera'):
-            duong_dan_thu_muc = os.path.join('hinhlaytucamera', folder)
-            if os.path.isdir(duong_dan_thu_muc):
-                duong_dan_moi = os.path.join('hinhtrain', folder)
-                shutil.copytree(duong_dan_thu_muc, duong_dan_moi)
+        # for folder in os.listdir('hinhlaytucamera'):
+        #     duong_dan_thu_muc = os.path.join('hinhlaytucamera', folder)
+        #     if os.path.isdir(duong_dan_thu_muc):
+        #         duong_dan_moi = os.path.join('hinhtrain', folder)
+        #         shutil.copytree(duong_dan_thu_muc, duong_dan_moi)
 
-        print("Đã copy dữ liệu từ 'hinhlaytucamera' vào 'hinhtrain'")
+        # print("Đã copy dữ liệu từ 'hinhlaytucamera' vào 'hinhtrain'")
+        
+        #---------------------------------------------------------------------
         
         # Kiểm tra các dữ liệu có trong database nhưng k có trong thư mục hinhlaytucamera
         cursor = conn.cursor()
@@ -157,7 +162,7 @@ def prepare_data():
     anh=1
     for file in os.listdir('hinhanh'):
         if os.path.exists('hinhtrain/'+file)==False:
-                os.mkdir('hinhtrain/'+file) 
+            os.mkdir('hinhtrain/'+file) 
         fullpath='hinhanh/'+file
         full_des_train_path='hinhtrain/'+file
         for img_name in os.listdir(fullpath):
@@ -212,9 +217,10 @@ def prepare_data():
             # crop_img=cv2.resize(crop_img,(224,224))
 
             cv2.imwrite(os.path.join(full_des_train_path , img_name), crop_img)
-            print("so anh ",anh)
+            # print("so anh ",anh)
             anh+=1
-    print('Doc va chuyen doi anh hoan tat \n')
+    print(f'Có {anh-1} ảnh trong database.')
+    print('Đã chuẩn bị xong lấy dữ liệu nhận diện\n')
 
 clear_thumb()
 prepare_data()
