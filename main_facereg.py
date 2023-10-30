@@ -46,7 +46,7 @@ def chuyen_base64_sang_anh(anh_base64):
             anh_base64 = cv2.imdecode(anh_base64, cv2.IMREAD_ANYCOLOR)
         except:
             return "chuyen fail"
-        return anh_base64
+        return anh_base64           # numpy.ndarray
     
 def img_to_bin(path):
     """ Chuyển embedding array của ảnh sang dạng Binary có thể lưu vào database
@@ -258,7 +258,7 @@ def mainVGGregface():
         # fresh[AA]=FreshestFrame(cv2.VideoCapture("rtsp://admin:Admin123@mtkhp2408.cameraddns.net:554/cam/realmonitor?channel=1&subtype=0&unicast=true"))
  
     frame =[object(),object(),object(),object()]
-    second_frame =[None,None,None,None,None,None,None,None,None,None,None,None,None]
+    second_frame = [None,None,None,None,None,None,None,None,None,None,None,None,None]
     cnt = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     # detect move
     first_frame = [None,None,None,None,None,None,None,None,None,None,None,None,None]
@@ -451,7 +451,7 @@ def mainVGGregface():
                                         put_alert_thread.start()
                                     print('Unknown Human',"min:",minratio,"eu",eucli)
                                     cv2.putText(frame[CC],'unknown human', (int(left*aspect_ratio_x)-20,int(top*aspect_ratio_y)-25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0,255 ), 2)
-                                    
+                                     
                                     # Lưu ảnh người lạ
                                     stranger_img = frame[CC].copy()
                                     cv2.putText(stranger_img, f"Minratio:  {minratio:.5f}", (20,170), cv2.FONT_HERSHEY_SIMPLEX, 1, (102, 255, 250), 2)
